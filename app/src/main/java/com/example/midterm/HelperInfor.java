@@ -14,6 +14,9 @@ public class HelperInfor {
     String phone;
     boolean available = false;
 
+
+    Double lat,lng;
+
     public HelperInfor(String HName, String gender, String DOB, String address, String notes, Float rating) {
         this.HName = HName;
         Gender = gender;
@@ -23,6 +26,21 @@ public class HelperInfor {
         Rating = rating;
     }
 
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
 
     public String getPhone() {
         return phone;

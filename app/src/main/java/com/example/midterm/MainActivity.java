@@ -3,10 +3,15 @@ package com.example.midterm;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
@@ -15,6 +20,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -25,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,12 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     HelperInfor helperInfor = new HelperInfor(null,null,null,null,null,(float)0);
     private String file_name;
     Intent intentToHired =null;
+    String lat, lng;
+    Double latitu, longtitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
+
         try {
             FileOutputStream fos = openFileOutput("test.txt", 0);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
@@ -47,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bw.write("Male" +'\n');
             bw.write("14/09/2000" +'\n');
             bw.write("231/83/8A Dương Bá Trạc, Phường 1, Quận 8" + '\n');
+            //bw.write("220 Đường Bùi Hữu Nghĩa, Phường 2, Quận Bình Thạnh" +'\n');
             bw.write("Work early in the noon" +'\n');
             bw.write("2"+'\n');
             bw.write(String.valueOf(Integer.valueOf(R.drawable.vinh_avt)) +'\n');
@@ -59,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IOException e) {
             e.printStackTrace();
         }
-*/
+
         Button booking = findViewById(R.id.booking);
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +191,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         note.setText(helperInfor.getNotes());
         phone.setText(helperInfor.getPhone());
         ratingBar.setRating(helperInfor.getRating());
+
+        try {
+            convertAddtoLatlng();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initRatingBar() {
@@ -184,9 +204,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        // Toast.makeText(this, String.valueOf(ratingBar.getRating()) , Toast.LENGTH_SHORT).show();
     }
 
-
+    private void convertAddtoLatlng() throws IOException {
+        Geocoder gc = new Geocoder(this);
+        List<Address> list = gc.getFromLocationName(helperInfor.Address.toString(), 1);
+        Address a = list.get(0);
+        latitu = a.getLatitude();
+        longtitude = a.getLongitude();
+    }
     @Override
     public void onClick(View view) {
 
     }
+
 }
